@@ -1,0 +1,18 @@
+<div>
+  <h2>Cifra de Transposição</h2>
+
+  <form [formGroup]="transpositionCiphersForm">
+    <label for="inputText">Texto:</label>
+    <input type="text" formControlName="inputText" id="inputText">
+
+    <label for="numColumns">Número de Colunas:</label>
+    <input type="number" formControlName="numColumns" id="numColumns">
+
+    <div>
+      <button type="button" (click)="encrypt()" [disabled]="transpositionCiphersForm.invalid">Criptografar</button>
+      <button type="button" (click)="decrypt()" [disabled]="transpositionCiphersForm.invalid">Descriptografar</button>
+    </div>
+  </form>
+
+  <p><strong>Resultado:</strong> {{ resultText }}</p>
+</div>

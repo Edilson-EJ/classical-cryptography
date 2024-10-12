@@ -1,0 +1,69 @@
+// Estilos principais do componente
+:host {
+  display: block;
+  margin: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  color: #4a90e2; // Cor azul para o título
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+// Estilizando o formulário
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+// Estilos para labels e inputs
+label {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #4a90e2; // Cor azul ao focar
+  outline: none;
+}
+
+// Estilos para os botões
+button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #357abd; // Cor mais escura ao passar o mouse
+}
+
+// Estilos para a exibição do resultado
+p {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
