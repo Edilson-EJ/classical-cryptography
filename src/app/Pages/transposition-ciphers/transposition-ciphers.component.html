@@ -1,18 +1,31 @@
-<div>
+<div class="cipher-container">
   <h2>Cifra de Transposição</h2>
 
-  <form [formGroup]="transpositionCiphersForm">
+  <form [formGroup]="transpositionCiphersForm" class="cipher-form">
+    <!-- Campo de texto -->
     <label for="inputText">Texto:</label>
-    <input type="text" formControlName="inputText" id="inputText">
+    <textarea id="inputText" formControlName="inputText" rows="4" class="cipher-textarea"></textarea>
+    <button type="button" (click)="clearInput()" class="action-button">Limpar</button>
 
-    <label for="numColumns">Número de Colunas:</label>
-    <input type="number" formControlName="numColumns" id="numColumns">
+    <!-- Campo de chave -->
+    <label for="key">Chave (sem letras repetidas):</label>
+    <input id="key" formControlName="key" type="text" class="cipher-input">
 
-    <div>
-      <button type="button" (click)="encrypt()" [disabled]="transpositionCiphersForm.invalid">Criptografar</button>
-      <button type="button" (click)="decrypt()" [disabled]="transpositionCiphersForm.invalid">Descriptografar</button>
+    <!-- Botões de ação -->
+    <div class="button-container">
+      <button type="button" (click)="encrypt()" class="action-button"
+        [disabled]="transpositionCiphersForm.invalid">Criptografar</button>
+      <button type="button" (click)="decrypt()" class="action-button"
+        [disabled]="transpositionCiphersForm.invalid">Descriptografar</button>
     </div>
   </form>
 
-  <p><strong>Resultado:</strong> {{ resultText }}</p>
+  <!-- Exibição do resultado -->
+  <p class="result-text"><strong>Resultado:</strong> {{ resultText }}</p>
+
+  <!-- Botão de copiar, visível apenas se houver texto no resultado -->
+  <button *ngIf="resultText" type="button" (click)="copyToClipboard()" class="action-button">Copiar</button>
+
+  <!-- Mensagem de confirmação de cópia -->
+  <p *ngIf="copiedMessage" class="copied-message">{{ copiedMessage }}</p>
 </div>
