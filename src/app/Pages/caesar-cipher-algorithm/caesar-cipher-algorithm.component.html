@@ -1,25 +1,24 @@
-<div>
+<div class="cipher-container">
   <h2>Cifra de César</h2>
 
   <!-- Formulário reativo -->
-  <form [formGroup]="cipherForm">
+  <form [formGroup]="cipherForm" class="cipher-form">
 
     <!-- Campo de texto -->
     <label for="inputText">Texto:</label>
-    <input id="inputText" formControlName="inputText" type="text">
+    <textarea id="inputText" formControlName="inputText" rows="4" class="cipher-textarea"></textarea>
 
     <!-- Campo de deslocamento -->
     <label for="shift">Deslocamento (k):</label>
-    <input id="shift" formControlName="shift" type="number">
+    <input id="shift" formControlName="shift" type="number" class="cipher-input">
 
     <!-- Botões de ação -->
-    <div>
-      <button type="button" (click)="encrypt()">Criptografar</button>
-      <button type="button" (click)="decrypt()">Descriptografar</button>
+    <div class="button-container">
+      <button type="button" (click)="encrypt()" class="action-button">Criptografar</button>
+      <button type="button" (click)="decrypt()" class="action-button">Descriptografar</button>
     </div>
-
   </form>
 
   <!-- Exibição do resultado -->
-  <p><strong>Resultado:</strong> {{ resultText }}</p>
+  <p class="result-text"><strong>Resultado:</strong> {{ resultText }}</p>
 </div>

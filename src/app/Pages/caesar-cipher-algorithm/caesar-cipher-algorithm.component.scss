@@ -1,69 +1,55 @@
-// Estilos principais do componente
-:host {
-  display: block;
-  margin: 20px;
-  font-family: Arial, sans-serif;
+.cipher-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0; /* Cor do texto */
 }
 
-h2 {
-  color: #4a90e2; // Cor azul para o título
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-// Estilizando o formulário
-form {
+.cipher-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 15px;
+  gap: 15px; /* Espaçamento entre os elementos */
 }
 
-// Estilos para labels e inputs
-label {
-  font-size: 16px;
-  color: #333;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="number"] {
+.cipher-textarea {
   padding: 10px;
-  width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  border: 1px solid #bb86fc;
+  border-radius: 8px;
+  background-color: #2e2e2e;
+  color: #e0e0e0;
+  resize: none; /* Impede o redimensionamento do textarea */
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border-color: #4a90e2; // Cor azul ao focar
-  outline: none;
+.cipher-input {
+  padding: 10px;
+  border: 1px solid #bb86fc;
+  border-radius: 8px;
+  background-color: #2e2e2e;
+  color: #e0e0e0;
 }
 
-// Estilos para os botões
-button {
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 5px;
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Distribui os botões com espaço entre eles */
+}
+
+.action-button {
   padding: 10px 20px;
-  font-size: 16px;
+  background-color: #3700b3;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #357abd; // Cor mais escura ao passar o mouse
+.action-button:hover {
+  background-color: #bb86fc; /* Cor ao passar o mouse */
 }
 
-// Estilos para a exibição do resultado
-p {
-  font-size: 18px;
-  color: #333;
-  text-align: center;
+.result-text {
   margin-top: 20px;
-  font-weight: bold;
+  color: #bb86fc; /* Cor do resultado */
 }
