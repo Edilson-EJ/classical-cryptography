@@ -31,6 +31,8 @@ export class UniqueKeyComponent {
       this.resultText = this.uniqueKeyService.encrypt(inputText, key);
     } catch (error) {
       console.error(error);
+      this.resultText =
+        'Erro ao processar o texto. Verifique a chave e o texto!';
     }
   }
 
@@ -42,6 +44,8 @@ export class UniqueKeyComponent {
       this.resultText = this.uniqueKeyService.decrypt(inputText, key);
     } catch (error) {
       console.error(error);
+      this.resultText =
+        'Erro ao processar o texto. Verifique a chave e o texto!';
     }
   }
 

@@ -2,15 +2,18 @@
   <h1>Cifra de Chave Única (One-Time Pad)</h1>
 
   <form [formGroup]="otpForm" class="cipher-form">
-    <!-- Campo de texto -->
     <label for="inputText">Texto:</label>
     <textarea id="inputText" formControlName="inputText" rows="4" class="cipher-input"></textarea>
+    <div *ngIf="otpForm.get('inputText')?.invalid && otpForm.get('inputText')?.touched" class="error-message">
+      O texto é obrigatório.
+    </div>
 
-    <!-- Campo de chave -->
     <label for="key">Chave:</label>
     <input id="key" formControlName="key" type="text" class="cipher-input">
+    <div *ngIf="otpForm.get('key')?.invalid && otpForm.get('key')?.touched" class="error-message">
+      A chave é obrigatória.
+    </div>
 
-    <!-- Botões de ação -->
     <div class="button-container">
       <button type="button" (click)="encrypt()" class="action-button" [disabled]="otpForm.invalid">Criptografar</button>
       <button type="button" (click)="decrypt()" class="action-button"
@@ -19,12 +22,7 @@
     </div>
   </form>
 
-  <!-- Exibição do resultado -->
   <p *ngIf="resultText" class="result-text"><strong>Resultado:</strong> {{ resultText }}</p>
-
-  <!-- Botão de copiar, visível apenas se houver texto no resultado -->
   <button *ngIf="resultText" type="button" (click)="copyToClipboard()" class="action-button">Copiar</button>
-
-  <!-- Mensagem de confirmação de cópia -->
   <p *ngIf="copiedMessage" class="copied-message">{{ copiedMessage }}</p>
 </div>
