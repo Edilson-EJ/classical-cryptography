@@ -13,6 +13,7 @@ export class TranspositionCiphersServiceService {
     for (let i = 0; i < alphabet.length; i++) {
       alphabetPosition[alphabet[i]] = i + 1; // Posições de 1 a 26
     }
+    console.log('Alfabeto', alphabet);
 
     return alphabetPosition;
   }
