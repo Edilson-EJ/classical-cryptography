@@ -23,6 +23,7 @@
   </form>
 
   <p *ngIf="resultText" class="result-text"><strong>Resultado:</strong> {{ resultText }}</p>
+
   <button *ngIf="resultText" type="button" (click)="copyToClipboard()" class="action-button">Copiar</button>
   <p *ngIf="copiedMessage" class="copied-message">{{ copiedMessage }}</p>
 </div>

@@ -6,46 +6,59 @@ import { AscIIService } from './asc-ii.service';
 })
 export class UniqueKeyService {
   private ascii = inject(AscIIService);
+  resultXOR: string[] = []; // Array para armazenar os resultados do XOR
 
-  encrypt(plainText: string, key: string): string {
+  encrypt(text: string, key: string): string {
+    console.log(`Texto sem espaços: ${text}`);
+    const extendedKey = this.extendKey(text, key);
+    console.log(`Chave estendida: ${extendedKey}`);
     let encryptedText = '';
-    const extendedKey = this.extendKey(plainText, key);
 
-    for (let i = 0; i < plainText.length; i++) {
-      const plainChar = plainText[i];
+    // Limpa o resultado do XOR antes de cada nova operação
+    this.resultXOR = [];
+
+    for (let i = 0; i < text.length; i++) {
+      const plainChar = text[i];
       const keyChar = extendedKey[i];
       const encryptedChar = this.encryptChar(plainChar, keyChar);
       encryptedText += encryptedChar;
     }
 
-    return encryptedText;
+    console.log(`Resultado do XOR de cada letra: ${this.resultXOR.join(', ')}`);
+    return encryptedText; // Retorna o texto criptografado
   }
 
   decrypt(encryptedText: string, key: string): string {
-    let decryptedText = '';
+    console.log(`Texto criptografado: ${encryptedText}`);
     const extendedKey = this.extendKey(encryptedText, key);
+    console.log(`Chave estendida: ${extendedKey}`);
+    let decryptedText = '';
 
-    for (let i = 0; i < encryptedText.length; i++) {
-      const encryptedChar = encryptedText[i];
-      const keyChar = extendedKey[i];
-      const decryptedChar = this.decryptChar(encryptedChar, keyChar);
+    // Itera sobre o texto criptografado em blocos de 8 bits
+    for (let i = 0; i < encryptedText.length; i += 8) {
+      const encryptedBinary = encryptedText.substring(i, i + 8); // Obtém o bloco de 8 bits
+      const keyChar = extendedKey.charAt(i / 8); // Obtém o caractere da chave correspondente
+
+      const decryptedChar = this.decryptChar(encryptedBinary, keyChar);
       decryptedText += decryptedChar;
     }
 
+    console.log(`Texto descriptografado final: ${decryptedText}`);
     return decryptedText;
   }
 
   private extendKey(text: string, key: string): string {
-    let extendedKey = key;
-    while (extendedKey.length < text.length) {
-      extendedKey += key;
-    }
-    return extendedKey.slice(0, text.length);
+    return key
+      .repeat(Math.ceil(text.length / key.length))
+      .slice(0, text.length);
   }
 
   private encryptChar(plainChar: string, keyChar: string): string {
     const plainBinary = this.ascii.getBinaryForLetter(plainChar);
     const keyBinary = this.ascii.getBinaryForLetter(keyChar);
+
+    console.log(`${plainChar} - ${plainBinary}`);
+    console.log(`${keyChar} - ${keyBinary}`);
 
     if (!plainBinary || !keyBinary) {
       console.error(`Caractere não encontrado: '${plainChar}' ou '${keyChar}'`);
@@ -53,23 +66,37 @@ export class UniqueKeyService {
     }
 
     const encryptedBinary = this.xorBinary(plainBinary, keyBinary);
-    return this.getPrintableChar(encryptedBinary);
+    console.log(`Resultado do XOR: ${encryptedBinary}`);
+
+    // Armazena o resultado do XOR no array resultXOR
+    this.resultXOR.push(encryptedBinary);
+
+    const encryptedChar = this.getPrintableChar(encryptedBinary);
+    console.log(`${plainChar} -> ${encryptedBinary} -> ${encryptedChar}`);
+
+    return encryptedChar;
   }
 
-  private decryptChar(encryptedChar: string, keyChar: string): string {
+  private decryptChar(encryptedBinary: string, keyChar: string): string {
     const keyBinary = this.ascii.getBinaryForLetter(keyChar);
-    const encryptedBinary = encryptedChar
-      .charCodeAt(0)
-      .toString(2)
-      .padStart(8, '0');
 
-    if (!keyBinary) {
-      console.error(`Caractere não encontrado: '${keyChar}'`);
+    console.log(`${encryptedBinary} (criptografado) - ${encryptedBinary}`);
+    console.log(`${keyChar} (chave) - ${keyBinary}`);
+
+    if (!encryptedBinary || !keyBinary) {
+      console.error(
+        `Caractere não encontrado: '${encryptedBinary}' ou '${keyChar}'`
+      );
       return ''; // Retorna uma string vazia se não encontrar
     }
 
     const decryptedBinary = this.xorBinary(encryptedBinary, keyBinary);
-    return this.getPrintableChar(decryptedBinary);
+    console.log(`Resultado do XOR reverso: ${decryptedBinary}`);
+
+    const decryptedChar = this.getPrintableChar(decryptedBinary);
+    console.log(`${encryptedBinary} -> ${decryptedBinary} -> ${decryptedChar}`);
+
+    return decryptedChar;
   }
 
   private xorBinary(binary1: string, binary2: string): string {
@@ -82,18 +109,10 @@ export class UniqueKeyService {
 
   private getPrintableChar(binary: string): string {
     const charCode = parseInt(binary, 2);
-    // Verifica se o código do caractere está no mapeamento
-    for (const [letter, binaryValue] of Object.entries(
-      this.ascii.alphabetBinaryMap
-    )) {
-      if (binaryValue === binary) {
-        return letter; // Retorna a letra correspondente
-      }
-    }
-    // Se não encontrou, tenta retornar a letra pelo código
     if (charCode >= 32 && charCode <= 126) {
+      // Intervalo de ASCII imprimível
       return String.fromCharCode(charCode); // Retorna o caractere imprimível
     }
-    return ''; // Retorna uma string vazia se não for imprimível
+    return '?'; // Retorna '?' para binários não imprimíveis
   }
 }
