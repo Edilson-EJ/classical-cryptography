@@ -6,26 +6,29 @@ import { AscIIService } from './asc-ii.service';
 })
 export class UniqueKeyService {
   private ascii = inject(AscIIService);
-  resultXOR: string[] = []; // Array para armazenar os resultados do XOR
+  resultXOR: string = ''; // String para armazenar o binário XOR completo
 
   encrypt(text: string, key: string): string {
-    console.log(`Texto sem espaços: ${text}`);
-    const extendedKey = this.extendKey(text, key);
+    // Remove espaços do texto antes de continuar
+    console.log('texto recebido', text);
+    const textWithoutSpaces = text.replace(/\s/g, '');
+    console.log(`Texto sem espaços: ${textWithoutSpaces}`);
+
+    const extendedKey = this.extendKey(textWithoutSpaces, key);
     console.log(`Chave estendida: ${extendedKey}`);
     let encryptedText = '';
 
-    // Limpa o resultado do XOR antes de cada nova operação
-    this.resultXOR = [];
+    this.resultXOR = ''; // Limpa o XOR
 
-    for (let i = 0; i < text.length; i++) {
-      const plainChar = text[i];
+    for (let i = 0; i < textWithoutSpaces.length; i++) {
+      const plainChar = textWithoutSpaces[i];
       const keyChar = extendedKey[i];
-      const encryptedChar = this.encryptChar(plainChar, keyChar);
-      encryptedText += encryptedChar;
+      const encryptedBinary = this.encryptChar(plainChar, keyChar);
+      this.resultXOR += encryptedBinary;
     }
 
-    console.log(`Resultado do XOR de cada letra: ${this.resultXOR.join(', ')}`);
-    return encryptedText; // Retorna o texto criptografado
+    console.log(`Resultado completo do XOR: ${this.resultXOR}`);
+    return this.resultXOR;
   }
 
   decrypt(encryptedText: string, key: string): string {
@@ -34,10 +37,20 @@ export class UniqueKeyService {
     console.log(`Chave estendida: ${extendedKey}`);
     let decryptedText = '';
 
-    // Itera sobre o texto criptografado em blocos de 8 bits
-    for (let i = 0; i < encryptedText.length; i += 8) {
-      const encryptedBinary = encryptedText.substring(i, i + 8); // Obtém o bloco de 8 bits
-      const keyChar = extendedKey.charAt(i / 8); // Obtém o caractere da chave correspondente
+    // Dividir o texto criptografado em blocos de 8 bits
+    const encryptedBlocks = encryptedText.match(/.{1,8}/g); // Divide em blocos de 8 bits
+
+    if (!encryptedBlocks) {
+      console.error(
+        'Erro: Não foi possível dividir o texto criptografado em blocos de 8 bits.'
+      );
+      return ''; // Retorna uma string vazia se a divisão falhar
+    }
+
+    // Itera sobre cada bloco de 8 bits
+    for (let i = 0; i < encryptedBlocks.length; i++) {
+      const encryptedBinary = encryptedBlocks[i]; // Obtém o bloco de 8 bits
+      const keyChar = extendedKey[i]; // Obtém o caractere da chave correspondente
 
       const decryptedChar = this.decryptChar(encryptedBinary, keyChar);
       decryptedText += decryptedChar;
@@ -57,46 +70,26 @@ export class UniqueKeyService {
     const plainBinary = this.ascii.getBinaryForLetter(plainChar);
     const keyBinary = this.ascii.getBinaryForLetter(keyChar);
 
-    console.log(`${plainChar} - ${plainBinary}`);
-    console.log(`${keyChar} - ${keyBinary}`);
-
     if (!plainBinary || !keyBinary) {
       console.error(`Caractere não encontrado: '${plainChar}' ou '${keyChar}'`);
-      return ''; // Retorna uma string vazia se não encontrar
+      return '';
     }
 
-    const encryptedBinary = this.xorBinary(plainBinary, keyBinary);
-    console.log(`Resultado do XOR: ${encryptedBinary}`);
-
-    // Armazena o resultado do XOR no array resultXOR
-    this.resultXOR.push(encryptedBinary);
-
-    const encryptedChar = this.getPrintableChar(encryptedBinary);
-    console.log(`${plainChar} -> ${encryptedBinary} -> ${encryptedChar}`);
-
-    return encryptedChar;
+    return this.xorBinary(plainBinary, keyBinary);
   }
 
   private decryptChar(encryptedBinary: string, keyChar: string): string {
     const keyBinary = this.ascii.getBinaryForLetter(keyChar);
 
-    console.log(`${encryptedBinary} (criptografado) - ${encryptedBinary}`);
-    console.log(`${keyChar} (chave) - ${keyBinary}`);
-
     if (!encryptedBinary || !keyBinary) {
       console.error(
         `Caractere não encontrado: '${encryptedBinary}' ou '${keyChar}'`
       );
-      return ''; // Retorna uma string vazia se não encontrar
+      return '';
     }
 
     const decryptedBinary = this.xorBinary(encryptedBinary, keyBinary);
-    console.log(`Resultado do XOR reverso: ${decryptedBinary}`);
-
-    const decryptedChar = this.getPrintableChar(decryptedBinary);
-    console.log(`${encryptedBinary} -> ${decryptedBinary} -> ${decryptedChar}`);
-
-    return decryptedChar;
+    return this.ascii.getLetterFromBinary(decryptedBinary); // Converte binário de volta para caractere
   }
 
   private xorBinary(binary1: string, binary2: string): string {
@@ -105,14 +98,5 @@ export class UniqueKeyService {
       result += binary1[i] === binary2[i] ? '0' : '1';
     }
     return result;
-  }
-
-  private getPrintableChar(binary: string): string {
-    const charCode = parseInt(binary, 2);
-    if (charCode >= 32 && charCode <= 126) {
-      // Intervalo de ASCII imprimível
-      return String.fromCharCode(charCode); // Retorna o caractere imprimível
-    }
-    return '?'; // Retorna '?' para binários não imprimíveis
   }
 }

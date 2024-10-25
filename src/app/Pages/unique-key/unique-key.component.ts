@@ -28,9 +28,9 @@ export class UniqueKeyComponent {
 
     try {
       // Criptografar texto
-      this.uniqueKeyService.encrypt(inputText, key);
-      // Agora define resultText para ser a string binária concatenada
-      this.resultText = this.uniqueKeyService.resultXOR.join(''); // Concatena os resultados do XOR
+      this.uniqueKeyService.encrypt(inputText, key); // Usar o texto original e a chave para a criptografia
+      // Agora define resultText para ser a string binária diretamente
+      this.resultText = this.uniqueKeyService.resultXOR; // Atribui a string resultXOR
     } catch (error) {
       console.error(error);
       this.resultText =
