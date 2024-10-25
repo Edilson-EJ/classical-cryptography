@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class AscIIService {
+  // Mapeamento de letras do alfabeto para suas representações binárias
   readonly alphabetBinaryMap: { [key: string]: string } = {
     a: '01100001',
     b: '01100010',
@@ -33,28 +34,31 @@ export class AscIIService {
     z: '01111010',
   };
 
+  // Método para obter a representação binária de uma letra
   getBinaryForLetter(letter: string): string {
-    return this.alphabetBinaryMap[letter] || ''; // Retorna vazio se não encontrado
+    return this.alphabetBinaryMap[letter] || '';
   }
 
-  // Método para converter uma string em binário apenas com letras
+  // Método para converter uma string em sua representação binária
   getBinaryForString(input: string): string {
     return input
       .split('')
-      .map((char) => this.getBinaryForLetter(char))
-      .filter((binary) => binary !== '') // Remove caracteres não mapeados
-      .join(' '); // Junta os resultados em uma única string
+      .map((char) => this.getBinaryForLetter(char)) // Mapeia cada caractere para sua representação binária
+      .filter((binary) => binary !== '') // Remove quaisquer caracteres que não têm representação binária
+      .join(' ');
   }
 
-  // Método para converter binário de volta para letras
+  // Método para converter uma string binária de volta para letras
   getLetterFromBinary(binaryString: string): string {
-    const binaryArray = binaryString.split(' '); // Divide a string em um array
+    // Divide a string binária em um array
+    const binaryArray = binaryString.split(' ');
     return binaryArray
       .map((binary) => {
+        // Encontra a letra correspondente ao valor binário
         const letter = Object.keys(this.alphabetBinaryMap).find(
           (key) => this.alphabetBinaryMap[key] === binary
         );
-        return letter || ''; // Retorna a letra correspondente ou vazio se não encontrado
+        return letter || '';
       })
       .join(''); // Junta as letras em uma única string
   }

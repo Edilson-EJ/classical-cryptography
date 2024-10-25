@@ -21,29 +21,41 @@ export class CaesarCipherAlgorithmComponent {
   private cipherService = inject(CaesarCipherAlgorithmServiceService);
   private formBuilder = inject(NonNullableFormBuilder);
 
+  // Variaveis
   resultText: string = '';
   copiedMessage: string | null = null;
+
   cipherForm: FormGroup = this.formBuilder.group({
     inputText: ['', Validators.required],
-    shift: [3, [Validators.required, Validators.min(1)]],
+    key: [3, [Validators.required, Validators.min(1)]],
   });
 
+  // Método para criptografar o texto
   encrypt(): void {
-    const { inputText, shift } = this.cipherForm.value;
+    // pegar o valor do formulário
+    const { inputText, key } = this.cipherForm.value;
+    // Verifica se o formulário é válido
     if (this.cipherForm.valid) {
-      this.resultText = this.cipherService.encrypt(inputText, shift);
+      // Chama o serviço de criptografia e armazena o resultado
+      this.resultText = this.cipherService.encrypt(inputText, key);
     }
   }
 
+  // Método para descriptografar o texto
   decrypt(): void {
-    const { inputText, shift } = this.cipherForm.value;
+    // pegar o valor do formulário
+    const { inputText, key } = this.cipherForm.value;
+    // Verifica se o formulário é válido
     if (this.cipherForm.valid) {
-      this.resultText = this.cipherService.decrypt(inputText, shift);
+      // Chama o serviço de descriptografia e armazena o resultado
+      this.resultText = this.cipherService.decrypt(inputText, key);
     }
   }
 
+  // Método para copiar o texto resultante para a área de transferência
   copyToClipboard() {
     if (this.resultText) {
+      // Verifica se há texto para copiar
       navigator.clipboard
         .writeText(this.resultText)
         .then(() => {
@@ -60,6 +72,7 @@ export class CaesarCipherAlgorithmComponent {
     }
   }
 
+  // Método para limpar os campos do formulário e a mensagem de cópia
   clearInput() {
     this.cipherForm.reset();
     this.resultText = '';

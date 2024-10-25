@@ -15,6 +15,7 @@ export class UniqueKeyComponent {
   private formBuilder = inject(FormBuilder);
   private uniqueKeyService = inject(UniqueKeyService);
 
+  // Criação do formulário reativo com validações
   otpForm: FormGroup = this.formBuilder.group({
     inputText: ['', Validators.required],
     key: ['', Validators.required],
@@ -23,14 +24,16 @@ export class UniqueKeyComponent {
   resultText: string = '';
   copiedMessage: string | null = null;
 
+  // Método para criptografar o texto
   encrypt(): void {
     const { inputText, key } = this.otpForm.value;
 
     try {
-      // Criptografar texto
-      this.uniqueKeyService.encrypt(inputText, key); // Usar o texto original e a chave para a criptografia
-      // Agora define resultText para ser a string binária diretamente
-      this.resultText = this.uniqueKeyService.resultXOR; // Atribui a string resultXOR
+      // Criptografar texto usando o serviço
+      // Usar o texto original e a chave para a criptografia
+      this.uniqueKeyService.encrypt(inputText, key);
+      // Define resultText para ser a string binária resultante da criptografia
+      this.resultText = this.uniqueKeyService.resultXOR;
     } catch (error) {
       console.error(error);
       this.resultText =
@@ -38,11 +41,14 @@ export class UniqueKeyComponent {
     }
   }
 
+  // Método para descriptografar o texto
   decrypt(): void {
+    // Desestrutura o valor do formulário
     const { inputText, key } = this.otpForm.value;
 
     try {
-      // Descriptografar texto
+      // Descriptografar texto usando o serviço
+      // Atribui o resultado da descriptografia
       this.resultText = this.uniqueKeyService.decrypt(inputText, key);
     } catch (error) {
       console.error(error);
@@ -51,6 +57,7 @@ export class UniqueKeyComponent {
     }
   }
 
+  // Método para copiar o texto resultante para a área de transferência
   copyToClipboard(): void {
     if (this.resultText) {
       navigator.clipboard
@@ -67,6 +74,7 @@ export class UniqueKeyComponent {
     }
   }
 
+  // Método para limpar o formulário e o resultado
   clearInput(): void {
     this.otpForm.reset();
     this.resultText = '';

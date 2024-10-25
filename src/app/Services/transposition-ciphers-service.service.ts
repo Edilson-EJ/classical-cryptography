@@ -11,7 +11,8 @@ export class TranspositionCiphersServiceService {
 
     // Preencher o objeto com a posição das letras
     for (let i = 0; i < alphabet.length; i++) {
-      alphabetPosition[alphabet[i]] = i + 1; // Posições de 1 a 26
+      // Posições de 1 a 26
+      alphabetPosition[alphabet[i]] = i + 1;
     }
     console.log('Alfabeto', alphabet);
 
@@ -23,7 +24,6 @@ export class TranspositionCiphersServiceService {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const alphabetPosition = this.generateAlphabetPosition();
 
-    // Remover espaços do texto original
     text = text.replace(/\s+/g, '');
 
     // Calcular o número de linhas
@@ -35,7 +35,6 @@ export class TranspositionCiphersServiceService {
       matrix[i] = text.slice(i * numColumns, (i + 1) * numColumns).split('');
     }
 
-    // Imprimir a matriz antes da criptografia
     console.log('Matriz antes da criptografia:');
     console.table(matrix);
 
@@ -45,7 +44,7 @@ export class TranspositionCiphersServiceService {
       .map((char, index) => ({
         char,
         index,
-        position: alphabetPosition[char],
+        position: alphabetPosition[char.toLowerCase()],
       }))
       .sort((a, b) => a.position - b.position);
 
@@ -53,11 +52,10 @@ export class TranspositionCiphersServiceService {
     console.log('Chave original:', key);
 
     console.log('Chave e posições antes da ordenação:');
-
     console.table(
       key.split('').map((char) => ({
         char,
-        position: alphabetPosition[char],
+        position: alphabetPosition[char.toLowerCase()],
       }))
     );
 
@@ -72,11 +70,9 @@ export class TranspositionCiphersServiceService {
       }
     }
 
-    // Imprimir a chave ordenada
     console.log('Chave e posições após a ordenação:');
     console.table(sortedKey);
 
-    // Imprimir a matriz após a criptografia
     console.log('Texto cifrado:', result);
 
     return result;
@@ -84,10 +80,13 @@ export class TranspositionCiphersServiceService {
 
   // Função para descriptografar o texto
   decrypt(text: string, numColumns: number, key: string): string {
+    // Número de linhas
     const numRows = Math.ceil(text.length / numColumns);
+    // Caracteres extras na última linha
     const numExtraChars = numColumns * numRows - text.length;
 
     const matrix: string[][] = [];
+    // Gera as posições do alfabeto
     const alphabetPosition = this.generateAlphabetPosition();
 
     // Ordenar as colunas de acordo com a chave
@@ -96,7 +95,7 @@ export class TranspositionCiphersServiceService {
       .map((char, index) => ({
         char,
         index,
-        position: alphabetPosition[char],
+        position: alphabetPosition[char.toLowerCase()],
       }))
       .sort((a, b) => a.position - b.position);
 
@@ -110,14 +109,15 @@ export class TranspositionCiphersServiceService {
           row === numRows - 1 &&
           originalIndex >= numColumns - numExtraChars
         ) {
-          matrix[originalIndex][row] = ''; // Última linha pode ter caracteres em branco
+          // Última linha pode ter caracteres em branco
+          matrix[originalIndex][row] = '';
         } else {
-          matrix[originalIndex][row] = text[index++] || ''; // Preencher a matriz
+          // Preencher a matriz
+          matrix[originalIndex][row] = text[index++] || '';
         }
       }
     }
 
-    // Imprimir a matriz antes da descriptografia
     console.table(matrix);
 
     let result = '';
@@ -127,12 +127,11 @@ export class TranspositionCiphersServiceService {
       for (let col = 0; col < numColumns; col++) {
         // Verificar se a posição é válida antes de adicionar ao resultado
         if (matrix[col] && matrix[col][row]) {
-          result += matrix[col][row];
+          result += matrix[col][row]; // Concatena as letras na ordem correta
         }
       }
     }
 
-    // Imprimir o texto descriptografado
     console.log('Texto descriptografado:', result);
 
     return result;

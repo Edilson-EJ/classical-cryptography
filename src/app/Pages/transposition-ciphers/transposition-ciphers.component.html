@@ -2,16 +2,16 @@
   <h2>Cifra de Transposição</h2>
 
   <form [formGroup]="transpositionCiphersForm" class="cipher-form">
-    <!-- Campo de texto -->
+
     <label for="inputText">Texto:</label>
     <textarea id="inputText" formControlName="inputText" rows="4" class="cipher-textarea"></textarea>
     <button type="button" (click)="clearInput()" class="action-button">Limpar</button>
 
-    <!-- Campo de chave -->
+
     <label for="key">Chave (sem letras repetidas):</label>
     <input id="key" formControlName="key" type="text" class="cipher-input">
 
-    <!-- Botões de ação -->
+
     <div class="button-container">
       <button type="button" (click)="encrypt()" class="action-button"
         [disabled]="transpositionCiphersForm.invalid">Criptografar</button>
@@ -20,12 +20,12 @@
     </div>
   </form>
 
-  <!-- Exibição do resultado -->
+
   <p class="result-text"><strong>Resultado:</strong> {{ resultText }}</p>
 
-  <!-- Botão de copiar, visível apenas se houver texto no resultado -->
+
   <button *ngIf="resultText" type="button" (click)="copyToClipboard()" class="action-button">Copiar</button>
 
-  <!-- Mensagem de confirmação de cópia -->
+
   <p *ngIf="copiedMessage" class="copied-message">{{ copiedMessage }}</p>
 </div>
