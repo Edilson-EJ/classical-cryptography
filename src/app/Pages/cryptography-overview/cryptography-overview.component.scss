@@ -63,3 +63,55 @@ iframe {
   max-width: 560px;
   height: 315px;
 }
+
+@media (max-width: 600px) {
+  .cryptography h2,
+  .cryptography-caesar-cipher h2,
+  .cryptography-transposition-algorithm h2,
+  .cryptography-unique-key h2 {
+    font-size: 1.5em;
+  }
+
+  .cryptography-article h3 {
+    font-size: 1.5em;
+  }
+
+  .cryptography,
+  .cryptography-caesar-cipher,
+  .cryptography-transposition-algorithm,
+  .cryptography-unique-key {
+    padding: 15px;
+  }
+
+  .video-container h4 {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 400px) {
+  .cryptography h2,
+  .cryptography-caesar-cipher h2,
+  .cryptography-transposition-algorithm h2,
+  .cryptography-unique-key h2 {
+    font-size: 1.2em;
+  }
+
+  .cryptography-article h3 {
+    font-size: 1.2em;
+  }
+
+  .cryptography,
+  .cryptography-caesar-cipher,
+  .cryptography-transposition-algorithm,
+  .cryptography-unique-key {
+    padding: 10px;
+  }
+
+  .video-container h4 {
+    font-size: 0.9em;
+  }
+
+  iframe {
+    height: 200px;
+  }
+}

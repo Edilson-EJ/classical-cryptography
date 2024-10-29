@@ -21,6 +21,7 @@
   display: flex;
   justify-content: center;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .menu-list li {
@@ -38,4 +39,34 @@
 
 .menu-list .nav-button:hover {
   background-color: #bb86fc;
+}
+
+@media (max-width: 600px) {
+  .title-site h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+  }
+
+  .menu-list li {
+    font-size: 1.1em;
+  }
+
+  .menu-list .nav-button {
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .title-site h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+
+  .menu-list li {
+    font-size: 1em;
+  }
+
+  .menu-list .nav-button {
+    padding: 6px 12px;
+  }
 }
